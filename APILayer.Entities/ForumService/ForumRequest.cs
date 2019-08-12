@@ -4,7 +4,7 @@ using System.Text;
 
 namespace APILayer.Entities.ForumService
 {
-    class ForumRequest
+    public class ForumRequest
     {
     }
 }

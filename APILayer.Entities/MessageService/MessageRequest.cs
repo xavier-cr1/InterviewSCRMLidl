@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace APILayer.Entities.UserService
+namespace APILayer.Entities.MessageService
 {
-    class UserRequest
+    public class MessageRequest
     {
     }
 }
