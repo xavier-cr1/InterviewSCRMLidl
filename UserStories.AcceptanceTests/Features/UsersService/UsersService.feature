@@ -7,6 +7,7 @@ Scenario: Create a new user
         | Xavier | xaviercr1 | Xavier1234. | QA   | xaviercasafont@test.com |
     Then The status code of the users service is '200'
 
+@Type:API
 Scenario: Get the user list
     Given The forum receives a request for obtaining the user list
     Then The status code of the users service is '200'

@@ -4,15 +4,19 @@ using APILayer.Entities.Commom;
 using APILayer.Entities.UserService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace APILayer.Client
 {
@@ -30,23 +34,14 @@ namespace APILayer.Client
             try
             {
                 using (var client = new HttpClient())
-                using (var request = new HttpRequestMessage())
                 {
-                    client.Timeout = TimeSpan.FromSeconds(180);
+                    client.Timeout = TimeSpan.FromSeconds(30);
 
                     // Create content
-                    var content = new StringContent(JsonConvert.SerializeObject(userRequest));
-                    content.Headers.ContentType = MediaTypeHeaderValue.Parse(this.JsonMediaType);
+                    var content = new StringContent(JsonConvert.SerializeObject(userRequest), Encoding.UTF8, this.JsonMediaType);
 
                     // Create request
-                    request.Content = content;
-                    request.Method = new HttpMethod("POST");
-                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(this.JsonMediaType));
-
-                    request.RequestUri = new Uri(usersServiceUrl, UriKind.RelativeOrAbsolute);
-
-                    // Response
-                    var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+                    var response = await client.PostAsync(usersServiceUrl, content);
 
                     return await this.CreateSwaggerResponse(response);
                 }
@@ -62,16 +57,11 @@ namespace APILayer.Client
             try
             {
                 using (var client = new HttpClient())
-                using (var request = new HttpRequestMessage())
                 {
-                    // Create request
-                    request.Method = new HttpMethod("GET");
-                    request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue(this.JsonMediaType));
-
-                    request.RequestUri = new Uri(usersServiceUrl, UriKind.RelativeOrAbsolute);
+                    client.Timeout = TimeSpan.FromSeconds(60);
 
                     // Response
-                    var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+                    var response = await client.GetAsync(usersServiceUrl);
 
                     return await this.CreateGenericSwaggerResponse<UserListResponse>(response);
                 }

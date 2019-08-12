@@ -12,6 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="SpecFlow" Version="3.0.225" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
+    <PackageReference Include="SpecFlow.xUnit" Version="3.0.225" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
   </ItemGroup>
@@ -19,6 +21,27 @@
   <ItemGroup>
     <ProjectReference Include="..\CrossLayer.Containers\CrossLayer.Containers.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Features\UsersService\UsersService.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UsersService.feature</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <SpecFlowFeatureFiles Update="Features\ForumService\ForumService.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\MessagesService\MessagesService.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+    </SpecFlowFeatureFiles>
+    <SpecFlowFeatureFiles Update="Features\UsersService\UsersService.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>UsersService.feature.cs</LastGenOutput>
+    </SpecFlowFeatureFiles>
+    </ItemGroup>
 
   <ItemGroup>
     <None Update="appSettings.json">

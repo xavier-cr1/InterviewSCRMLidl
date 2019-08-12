@@ -28,9 +28,17 @@ namespace APILayer.Client
             var status = ((int)response.StatusCode).ToString();
             var responseData = await this.CreateResponseData(response, status, headers);
 
-            var result = default(T);
-            result = JsonConvert.DeserializeObject<T>(responseData);
-            return new SwaggerResponse<T>(status, headers, result);
+            try
+            {
+                var result = default(T);
+                result = JsonConvert.DeserializeObject<T>(responseData);
+                return new SwaggerResponse<T>(status, headers, result);
+            }
+            catch(Exception ex)
+            {
+                throw new SwaggerException(responseData, ex);
+            }
+
         }
 
         protected async Task<SwaggerResponse> CreateSwaggerResponse(HttpResponseMessage response, bool isArrayByteData = false)
