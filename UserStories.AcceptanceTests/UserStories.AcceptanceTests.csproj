@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -15,39 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CrossLayer.Containers\CrossLayer.Containers.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Features\ForumService\ForumService.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ForumService.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\MessagesService\MessagesService.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MessagesService.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\UsersService\UsersService.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>UsersService.feature</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Features\ForumService\ForumService.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ForumService.feature.cs</LastGenOutput>
-    </None>
-    <None Update="Features\MessagesService\MessagesService.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MessagesService.feature.cs</LastGenOutput>
-    </None>
-    <None Update="Features\UsersService\UsersService.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>UsersService.feature.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
 </Project>

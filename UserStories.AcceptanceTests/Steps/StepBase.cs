@@ -6,7 +6,7 @@ using TechTalk.SpecFlow;
 namespace UserStories.AcceptanceTests
 {
     [Binding]
-    public class StepBase : Steps
+    public class StepBase : TechTalk.SpecFlow.Steps
     {
     }
 }
