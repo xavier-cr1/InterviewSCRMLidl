@@ -76,19 +76,38 @@ namespace UserStories.AcceptanceTests.Features.ForumService
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="User request")]
+        [Xunit.FactAttribute(DisplayName="Obtain a new message in the forum in its themes list")]
         [Xunit.TraitAttribute("FeatureTitle", "ForumService")]
-        [Xunit.TraitAttribute("Description", "User request")]
+        [Xunit.TraitAttribute("Description", "Obtain a new message in the forum in its themes list")]
         [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void UserRequest()
+        public virtual void ObtainANewMessageInTheForumInItsThemesList()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User request", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain a new message in the forum in its themes list", null, new string[] {
                         "Type:API"});
-#line 4
+#line 5
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 5
-    testRunner.Given("The user requests forum", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Theme",
+                        "Subject",
+                        "Message"});
+            table1.AddRow(new string[] {
+                        "Automation",
+                        "Herokuapp api automation",
+                        "I\'m doing it in .net core, what do you think?"});
+#line 6
+    testRunner.Given("The forum receives a request for creating a message with the following properties" +
+                    "", ((string)(null)), table1, "Given ");
+#line 9
+    testRunner.Then("The status code for creating a message in the forum is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 10
+    testRunner.When("The forum receives a request for obtaining the forum messages list by theme \'\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 11
+    testRunner.And("The status code for getting the forum messages list is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 12
+    testRunner.Then("The message with the subject \'Herokuapp api automation\' is in the theme \'Automati" +
+                    "on\' list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

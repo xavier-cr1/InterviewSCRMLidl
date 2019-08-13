@@ -4,17 +4,9 @@ using APILayer.Entities.Commom;
 using APILayer.Entities.UserService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 
 

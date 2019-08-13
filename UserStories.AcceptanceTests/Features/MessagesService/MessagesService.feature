@@ -1,5 +1,5 @@
 ﻿Feature: MessagesService
 
 @Type:API
-Scenario: User request
-    Given The user requests messages
+Scenario: Obtain new created message in messages list
+    Given The forum receives a request for creating a message with the following properties

@@ -28,36 +28,18 @@ namespace APILayer.Client
             var status = ((int)response.StatusCode).ToString();
             var responseData = await this.CreateResponseData(response, status, headers);
 
-            try
-            {
-                var result = default(T);
-                result = JsonConvert.DeserializeObject<T>(responseData);
-                return new SwaggerResponse<T>(status, headers, result);
-            }
-            catch(Exception ex)
-            {
-                throw new SwaggerException(responseData, ex);
-            }
-
+            var result = default(T);
+            result = JsonConvert.DeserializeObject<T>(responseData);
+            return new SwaggerResponse<T>(status, headers, result);
         }
 
-        protected async Task<SwaggerResponse> CreateSwaggerResponse(HttpResponseMessage response, bool isArrayByteData = false)
+        protected async Task<SwaggerResponse> CreateSwaggerResponse(HttpResponseMessage response)
         {
             var headers = this.CreateHeadersDictionary(response);
             var status = ((int)response.StatusCode).ToString();
 
-            if (isArrayByteData)
-            {
-                var responseData = await this.CreateByteArrayResponseData(response, status, headers);
-
-                return new SwaggerResponse(status, headers, responseData);
-            }
-            else
-            {
-                var responseData = await this.CreateResponseData(response, status, headers);
-
-                return new SwaggerResponse(status, headers, responseData);
-            }
+            var responseData = await this.CreateResponseData(response, status, headers);
+            return new SwaggerResponse(status, headers, responseData);
         }
 
         private async Task<string> CreateResponseData(HttpResponseMessage response, string status, IDictionary<string, IEnumerable<string>> headers)
@@ -72,24 +54,6 @@ namespace APILayer.Client
 
                 default:
                     this.ThrowSwaggerException(status, responseData, headers);
-                    return null;
-            }
-        }
-
-        private async Task<byte[]> CreateByteArrayResponseData(HttpResponseMessage response, string status, IDictionary<string, IEnumerable<string>> headers)
-        {
-            byte[] responseData;
-            responseData = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-
-            switch (status)
-            {
-                case "200":
-                case "201":
-                case "204":
-                    return responseData;
-
-                default:
-                    this.ThrowSwaggerException(status, Encoding.UTF8.GetString(responseData, 0, responseData.Length), headers);
                     return null;
             }
         }

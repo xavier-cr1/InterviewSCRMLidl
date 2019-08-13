@@ -76,53 +76,40 @@ namespace UserStories.AcceptanceTests.Features.UsersService
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="Create a new user")]
+        [Xunit.FactAttribute(DisplayName="Obtain new created user for the forum in users list")]
         [Xunit.TraitAttribute("FeatureTitle", "UsersService")]
-        [Xunit.TraitAttribute("Description", "Create a new user")]
+        [Xunit.TraitAttribute("Description", "Obtain new created user for the forum in users list")]
         [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void CreateANewUser()
+        public virtual void ObtainNewCreatedUserForTheForumInUsersList()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a new user", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain new created user for the forum in users list", null, new string[] {
                         "Type:API"});
-#line 4
+#line 5
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Name",
                         "Username",
                         "Password",
                         "Role",
                         "Email"});
-            table1.AddRow(new string[] {
+            table2.AddRow(new string[] {
                         "Xavier",
                         "xaviercr1",
                         "Xavier1234.",
                         "QA",
                         "xaviercasafont@test.com"});
-#line 5
-    testRunner.Given("The forum receives a request for creating a user with the following properties", ((string)(null)), table1, "Given ");
-#line 8
-    testRunner.Then("The status code of the users service is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.FactAttribute(DisplayName="Get the user list")]
-        [Xunit.TraitAttribute("FeatureTitle", "UsersService")]
-        [Xunit.TraitAttribute("Description", "Get the user list")]
-        [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void GetTheUserList()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get the user list", null, new string[] {
-                        "Type:API"});
+#line 6
+    testRunner.Given("The forum receives a request for creating a user with the following properties", ((string)(null)), table2, "Given ");
+#line 9
+    testRunner.Then("The status code for creating a new user is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 10
+    testRunner.When("The forum receives a request for obtaining the user list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
-this.ScenarioInitialize(scenarioInfo);
-            this.ScenarioStart();
+    testRunner.And("The status code for getting the users list is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
-    testRunner.Given("The forum receives a request for obtaining the user list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 13
-    testRunner.Then("The status code of the users service is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("The user with the username \'xaviercr1\' is in the list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

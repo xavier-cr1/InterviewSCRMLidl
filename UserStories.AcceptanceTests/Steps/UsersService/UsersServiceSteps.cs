@@ -2,7 +2,6 @@
 using APILayer.Entities;
 using APILayer.Entities.UserService;
 using FluentAssertions;
-using System;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -29,17 +28,31 @@ namespace UserStories.AcceptanceTests.Steps
             this.response = await this.usersServiceRestApi.PostNewUserAsync(this.userRequest);
         }
 
-        [Given(@"The forum receives a request for obtaining the user list")]
+        [When(@"The forum receives a request for obtaining the user list")]
         public async Task GivenTheForumReceivesARequestForCreatingAUserWithTheFollowingProperties()
         {
             this.userListResponse = await this.usersServiceRestApi.GetUserListAsync();
         }
 
-        [Then(@"The status code of the users service is '(.*)'")]
-        public void ThenTheStatusCodeOfTheUsersServiceIs(string expectedCode)
+        [When(@"The status code for getting the users list is '(.*)'")]
+        public void ThenTheStatusCodeForGettingTheUsersListIs(string expectedStatusCode)
         {
-            var realCode = this.response.StatusCode;
-            realCode.Should().Be(expectedCode, $"Real code {realCode} --- Expected code {expectedCode}");
+            var realStatusCode = this.userListResponse.StatusCode;
+            realStatusCode.Should().Be(expectedStatusCode, $"Real code {realStatusCode} --- Expected code {expectedStatusCode}");
+        }
+
+        [Then(@"The status code for creating a new user is '(.*)'")]
+        public void ThenTheStatusCodeForCreatingNewUserIs(string expectedStatusCode)
+        {
+            var realStatusCode = this.response.StatusCode;
+            realStatusCode.Should().Be(expectedStatusCode, $"Real code {realStatusCode} --- Expected code {expectedStatusCode}");
+        }
+
+        [Then(@"The user with the username '(.*)' is in the list")]
+        public void ThenTheUniqueUserIsInTheList(string username)
+        {
+            var realUserList = this.userListResponse.Result.Users;
+            realUserList.Should().Contain(user => user.Username.Equals(username));
         }
     }
 }

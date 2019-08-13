@@ -76,19 +76,20 @@ namespace UserStories.AcceptanceTests.Features.MessagesService
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="User request")]
+        [Xunit.FactAttribute(DisplayName="Obtain new created message in messages list")]
         [Xunit.TraitAttribute("FeatureTitle", "MessagesService")]
-        [Xunit.TraitAttribute("Description", "User request")]
+        [Xunit.TraitAttribute("Description", "Obtain new created message in messages list")]
         [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void UserRequest()
+        public virtual void ObtainNewCreatedMessageInMessagesList()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User request", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain new created message in messages list", null, new string[] {
                         "Type:API"});
 #line 4
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 5
-    testRunner.Given("The user requests messages", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("The forum receives a request for creating a message with the following properties" +
+                    "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             this.ScenarioCleanup();
         }
