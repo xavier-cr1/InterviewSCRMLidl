@@ -2,7 +2,7 @@
 
 @Type:API
 #Add user with QA role and obtain full users list (addtional meaningful, check user exists)
-Scenario: Obtain new created user for the forum in users list
+Scenario: Obtain a new created user for the forum in users list
     Given The forum receives a request for creating a user with the following properties
         | Name   | Username  | Password    | Role | Email                   |
         | Xavier | xaviercr1 | Xavier1234. | QA   | xaviercasafont@test.com |

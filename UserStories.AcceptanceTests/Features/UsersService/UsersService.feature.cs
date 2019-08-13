@@ -76,32 +76,32 @@ namespace UserStories.AcceptanceTests.Features.UsersService
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="Obtain new created user for the forum in users list")]
+        [Xunit.FactAttribute(DisplayName="Obtain a new created user for the forum in users list")]
         [Xunit.TraitAttribute("FeatureTitle", "UsersService")]
-        [Xunit.TraitAttribute("Description", "Obtain new created user for the forum in users list")]
+        [Xunit.TraitAttribute("Description", "Obtain a new created user for the forum in users list")]
         [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void ObtainNewCreatedUserForTheForumInUsersList()
+        public virtual void ObtainANewCreatedUserForTheForumInUsersList()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain new created user for the forum in users list", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain a new created user for the forum in users list", null, new string[] {
                         "Type:API"});
 #line 5
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line hidden
-            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                         "Name",
                         "Username",
                         "Password",
                         "Role",
                         "Email"});
-            table2.AddRow(new string[] {
+            table3.AddRow(new string[] {
                         "Xavier",
                         "xaviercr1",
                         "Xavier1234.",
                         "QA",
                         "xaviercasafont@test.com"});
 #line 6
-    testRunner.Given("The forum receives a request for creating a user with the following properties", ((string)(null)), table2, "Given ");
+    testRunner.Given("The forum receives a request for creating a user with the following properties", ((string)(null)), table3, "Given ");
 #line 9
     testRunner.Then("The status code for creating a new user is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 10

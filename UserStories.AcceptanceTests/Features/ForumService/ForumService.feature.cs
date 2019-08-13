@@ -76,13 +76,13 @@ namespace UserStories.AcceptanceTests.Features.ForumService
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="Obtain a new message in the forum in its themes list")]
+        [Xunit.FactAttribute(DisplayName="Obtain a new created message in the forum inside its theme list")]
         [Xunit.TraitAttribute("FeatureTitle", "ForumService")]
-        [Xunit.TraitAttribute("Description", "Obtain a new message in the forum in its themes list")]
+        [Xunit.TraitAttribute("Description", "Obtain a new created message in the forum inside its theme list")]
         [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void ObtainANewMessageInTheForumInItsThemesList()
+        public virtual void ObtainANewCreatedMessageInTheForumInsideItsThemeList()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain a new message in the forum in its themes list", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain a new created message in the forum inside its theme list", null, new string[] {
                         "Type:API"});
 #line 5
 this.ScenarioInitialize(scenarioInfo);

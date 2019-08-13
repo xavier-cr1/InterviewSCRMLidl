@@ -71,25 +71,46 @@ namespace UserStories.AcceptanceTests.Features.MessagesService
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 3
+#line 4
+    testRunner.Given("The user with username \'\' and password \'\' is authorised", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+        }
+        
         void System.IDisposable.Dispose()
         {
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="Obtain new created message in messages list")]
+        [Xunit.FactAttribute(DisplayName="Obtain a new private message sent to a user")]
         [Xunit.TraitAttribute("FeatureTitle", "MessagesService")]
-        [Xunit.TraitAttribute("Description", "Obtain new created message in messages list")]
+        [Xunit.TraitAttribute("Description", "Obtain a new private message sent to a user")]
         [Xunit.TraitAttribute("Category", "Type:API")]
-        public virtual void ObtainNewCreatedMessageInMessagesList()
+        public virtual void ObtainANewPrivateMessageSentToAUser()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain new created message in messages list", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain a new private message sent to a user", null, new string[] {
                         "Type:API"});
-#line 4
+#line 7
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 5
-    testRunner.Given("The forum receives a request for creating a message with the following properties" +
-                    "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 3
+this.FeatureBackground();
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Message"});
+            table2.AddRow(new string[] {
+                        "Sending to myself a test message"});
+#line 8
+    testRunner.Given("The username \'xaviercr1\' receives a private message with the following properties" +
+                    "", ((string)(null)), table2, "Given ");
+#line 11
+    testRunner.Then("The status code for sending a private message in the forum is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 12
+    testRunner.When("The username \'xaviercr1\' obtains its private message list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 13
+    testRunner.And("The status code for obtaining the private message list is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
