@@ -56,19 +56,19 @@ namespace UserStories.AcceptanceTests.Steps.ForumService
             {
                 case "Automation":
                     var realAutomationMessageResult = this.forumListResponse.Result.AutomationMessage;
-                    realAutomationMessageResult.Should().Contain(automationMessage => automationMessage.Subject.Equals(subject));
+                    realAutomationMessageResult.Should().Contain(automationMessage => automationMessage.Subject.Equals(subject), $"The expected {subject} doesn't exist in Automation message list.");
                     break;
                 case "Development":
                     var realDevelopmentMessageResult = this.forumListResponse.Result.DevelopmentMessage;
-                    realDevelopmentMessageResult.Should().Contain(developmentMessage => developmentMessage.Subject.Equals(subject));
+                    realDevelopmentMessageResult.Should().Contain(developmentMessage => developmentMessage.Subject.Equals(subject), $"The expected {subject} doesn't exist in Development message list.");
                     break;
                 case "Security":
                     var realSecurityMessageResult = this.forumListResponse.Result.SecurityMessage;
-                    realSecurityMessageResult.Should().Contain(securityMessage => securityMessage.Subject.Equals(subject));
+                    realSecurityMessageResult.Should().Contain(securityMessage => securityMessage.Subject.Equals(subject), $"The expected {subject} doesn't exist in Security message list.");
                     break;
                 case "Testing":
                     var realTestingMessageResult = this.forumListResponse.Result.TestingMessage;
-                    realTestingMessageResult.Should().Contain(testingMessage => testingMessage.Subject.Equals(subject));
+                    realTestingMessageResult.Should().Contain(testingMessage => testingMessage.Subject.Equals(subject), $"The expected {subject} doesn't exist in Testing message list.");
                     break;
                 default:
                     theme.Should().BeOneOf("Automation", "Development", "Security", "Testing");

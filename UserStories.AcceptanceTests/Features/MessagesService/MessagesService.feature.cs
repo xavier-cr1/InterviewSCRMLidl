@@ -71,6 +71,16 @@ namespace UserStories.AcceptanceTests.Features.MessagesService
             testRunner.CollectScenarioErrors();
         }
         
+        public virtual void FeatureBackground()
+        {
+#line 4
+#line 5
+     testRunner.Given("The forum receives a request for obtaining the user list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 6
+     testRunner.And("The user with the username \'xaviercr1\' is in registered users list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+        }
+        
         void System.IDisposable.Dispose()
         {
             this.ScenarioTearDown();
@@ -84,23 +94,25 @@ namespace UserStories.AcceptanceTests.Features.MessagesService
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Obtain a new private message sent to a user", null, new string[] {
                         "Type:API"});
-#line 5
+#line 10
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
+#line 4
+this.FeatureBackground();
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "Message"});
             table2.AddRow(new string[] {
                         "Sending to myself a test message"});
-#line 6
+#line 11
     testRunner.Given("The username \'xaviercr1\' receives a private message with the following properties" +
                     "", ((string)(null)), table2, "Given ");
-#line 9
+#line 14
     testRunner.Then("The status code for sending a private message in the forum is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 10
+#line 15
     testRunner.When("The username \'xaviercr1\' and password \'Xavier1234.\' obtains its private message l" +
                     "ist with the new message \'Sending to myself a test message\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 11
+#line 16
     testRunner.And("The status code for obtaining the private message list is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

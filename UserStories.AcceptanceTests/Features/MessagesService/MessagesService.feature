@@ -1,5 +1,10 @@
 ﻿Feature: MessagesService
 
+#For sending a private message to user, always verify the user exists
+Background: 
+     Given The forum receives a request for obtaining the user list
+     And The user with the username 'xaviercr1' is in registered users list
+
 @Type:API
 #Send a private message to users himself, and check if this message exists (obtain this new private message)
 Scenario: Obtain a new private message sent to a user

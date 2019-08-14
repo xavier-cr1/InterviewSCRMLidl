@@ -29,6 +29,7 @@ namespace UserStories.AcceptanceTests.Steps
         }
 
         [When(@"The forum receives a request for obtaining the user list")]
+        [Given(@"The forum receives a request for obtaining the user list")]
         public async Task GivenTheForumReceivesARequestForCreatingAUserWithTheFollowingProperties()
         {
             this.userListResponse = await this.usersServiceRestApi.GetUserListAsync();
@@ -53,7 +54,7 @@ namespace UserStories.AcceptanceTests.Steps
         public void ThenTheUniqueUserIsInTheList(string username)
         {
             var realUserList = this.userListResponse.Result.Users;
-            realUserList.Should().Contain(user => user.Username.Equals(username));
+            realUserList.Should().Contain(user => user.Username.Equals(username), $"The expected username: {username} is not in forum's user list.");
         }
     }
 }
