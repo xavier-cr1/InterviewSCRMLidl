@@ -15,37 +15,11 @@ namespace APILayer.Client
 {
     public class MessagesRestService : RestApiBase, IMessageServiceRestApi
     {
-        private string rootUrl => this.ConfigurationRoot.GetSection("BaseConfiguration")["RootUrl"];
-
         private string messageServiceUrl => this.ConfigurationRoot.GetSection("AppConfiguration")["MessageAPIService"];
 
         public MessagesRestService(IConfigurationRoot configurationRoot)
             : base(configurationRoot)
         {
-        }
-
-        public void AuthoriseUserInForum(string username, string password)
-        {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(30);
-
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
-
-                    // Create request
-                    client.GetAsync(rootUrl);
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                throw new HttpRequestException(ex.Message, ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message, ex);
-            }
         }
 
         public async Task<SwaggerResponse> SendPrivateMessageAsync(string username, PrivateMessage privateMessageRequest)
