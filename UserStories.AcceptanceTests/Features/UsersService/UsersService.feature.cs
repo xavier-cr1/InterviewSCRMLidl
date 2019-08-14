@@ -109,7 +109,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 11
     testRunner.And("The status code for getting the users list is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 12
-    testRunner.Then("The user with the username \'xaviercr1\' is in the list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("The user with the username \'xaviercr1\' is in registered users list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

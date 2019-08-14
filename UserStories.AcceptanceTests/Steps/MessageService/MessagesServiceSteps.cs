@@ -1,39 +1,54 @@
-﻿using System;
+﻿using APILayer.Client.Contracts;
+using APILayer.Entities;
+using APILayer.Entities.MessageService;
+using FluentAssertions;
+using System;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace UserStories.AcceptanceTests.Steps.MessageService
 {
     [Binding]
-    public class MessagesServiceSteps
+    public class MessagesServiceSteps : StepBase
     {
-        [Given(@"The user with username ''(.*)'' is authorised")]
-        public void GivenTheUserWithUsernameIsAuthorised(string p0)
+        private readonly IMessageServiceRestApi messagesServiceRestApi;
+        private PrivateMessage forumRequest;
+        private SwaggerResponse response;
+        private SwaggerResponse<PrivateMessageResponse> messagesListResponse;
+
+        public MessagesServiceSteps(IMessageServiceRestApi messagesServiceRestApi)
         {
-            ScenarioContext.Current.Pending();
+            this.messagesServiceRestApi = messagesServiceRestApi;
         }
 
         [Given(@"The username '(.*)' receives a private message with the following properties")]
-        public void GivenTheUsernameReceivesAPrivateMessageWithTheFollowingProperties(string p0, Table table)
+        public async Task GivenTheUsernameReceivesAPrivateMessageWithTheFollowingProperties(string username, Table table)
         {
-            ScenarioContext.Current.Pending();
+            this.forumRequest = table.CreateInstance<PrivateMessage>();
+            this.response = await this.messagesServiceRestApi.SendPrivateMessageAsync(username, this.forumRequest);
         }
 
-        [When(@"The username '(.*)' obtains its private message list")]
-        public void WhenTheUsernameObtainsItsPrivateMessageList(string p0)
+        [When(@"The username '(.*)' and password '(.*)' obtains its private message list with the new message '(.*)'")]
+        public async Task WhenTheUsernameObtainsItsPrivateMessageList(string username, string password, string newMessage)
         {
-            ScenarioContext.Current.Pending();
+            this.messagesListResponse = await this.messagesServiceRestApi.GetPrivateMessageListAsync(username, password);
+            var realPrivateMessageList = this.messagesListResponse.Result.Messages;
+            realPrivateMessageList.Should().Contain(privateMessage => privateMessage.Message.Equals(newMessage));
         }
 
         [When(@"The status code for obtaining the private message list is '(.*)'")]
-        public void WhenTheStatusCodeForObtainingThePrivateMessageListIs(int p0)
+        public void WhenTheStatusCodeForObtainingThePrivateMessageListIs(string expectedStatusCode)
         {
-            ScenarioContext.Current.Pending();
+            var realStatusCodePrivateMessageList = this.messagesListResponse.StatusCode;
+            realStatusCodePrivateMessageList.Should().Be(expectedStatusCode, $"Real code {realStatusCodePrivateMessageList} --- Expected code {expectedStatusCode}");
         }
 
         [Then(@"The status code for sending a private message in the forum is '(.*)'")]
-        public void ThenTheStatusCodeForSendingAPrivateMessageInTheForumIs(int p0)
+        public void ThenTheStatusCodeForSendingAPrivateMessageInTheForumIs(string expectedStatusCode)
         {
-            ScenarioContext.Current.Pending();
+            var realStatusCodePostPrivateMessage = this.response.StatusCode;
+            realStatusCodePostPrivateMessage.Should().Be(expectedStatusCode, $"Real code {realStatusCodePostPrivateMessage} --- Expected code {expectedStatusCode}");
         }
     }
 }

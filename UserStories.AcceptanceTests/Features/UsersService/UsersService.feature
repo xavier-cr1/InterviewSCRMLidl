@@ -9,4 +9,4 @@ Scenario: Obtain a new created user for the forum in users list
     Then The status code for creating a new user is '200'
     When The forum receives a request for obtaining the user list
     And The status code for getting the users list is '200'
-    Then The user with the username 'xaviercr1' is in the list
+    Then The user with the username 'xaviercr1' is in registered users list

@@ -37,18 +37,19 @@ namespace UserStories.AcceptanceTests.Steps
         [When(@"The status code for getting the users list is '(.*)'")]
         public void ThenTheStatusCodeForGettingTheUsersListIs(string expectedStatusCode)
         {
-            var realStatusCode = this.userListResponse.StatusCode;
-            realStatusCode.Should().Be(expectedStatusCode, $"Real code {realStatusCode} --- Expected code {expectedStatusCode}");
+            var realStatusCodeUsersList = this.userListResponse.StatusCode;
+            realStatusCodeUsersList.Should().Be(expectedStatusCode, $"Real code {realStatusCodeUsersList} --- Expected code {expectedStatusCode}");
         }
 
         [Then(@"The status code for creating a new user is '(.*)'")]
         public void ThenTheStatusCodeForCreatingNewUserIs(string expectedStatusCode)
         {
-            var realStatusCode = this.response.StatusCode;
-            realStatusCode.Should().Be(expectedStatusCode, $"Real code {realStatusCode} --- Expected code {expectedStatusCode}");
+            var realStatusCodePostUser = this.response.StatusCode;
+            realStatusCodePostUser.Should().Be(expectedStatusCode, $"Real code {realStatusCodePostUser} --- Expected code {expectedStatusCode}");
         }
 
-        [Then(@"The user with the username '(.*)' is in the list")]
+        [Given(@"The user with the username '(.*)' is in registered users list")]
+        [Then(@"The user with the username '(.*)' is in registered users list")]
         public void ThenTheUniqueUserIsInTheList(string username)
         {
             var realUserList = this.userListResponse.Result.Users;

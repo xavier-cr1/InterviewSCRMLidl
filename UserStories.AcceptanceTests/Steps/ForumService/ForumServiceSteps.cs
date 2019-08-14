@@ -38,15 +38,15 @@ namespace UserStories.AcceptanceTests.Steps.ForumService
         [When(@"The status code for getting the forum messages list is '(.*)'")]
         public void WhenTheStatusCodeForGettingTheForumMessagesListIs(string expectedStatusCode)
         {
-            var realStatusCode = this.forumListResponse.StatusCode;
-            realStatusCode.Should().Be(expectedStatusCode, $"Real code {realStatusCode} --- Expected code {expectedStatusCode}");
+            var realStatusCodeForumMessage = this.forumListResponse.StatusCode;
+            realStatusCodeForumMessage.Should().Be(expectedStatusCode, $"Real code {realStatusCodeForumMessage} --- Expected code {expectedStatusCode}");
         }
 
         [Then(@"The status code for creating a message in the forum is '(.*)'")]
         public void ThenTheStatusCodeForCreatingAMessageInTheForumIs(string expectedStatusCode)
         {
-            var realStatusCode = this.response.StatusCode;
-            realStatusCode.Should().Be(expectedStatusCode, $"Real code {realStatusCode} --- Expected code {expectedStatusCode}");
+            var realStatusCodePostForum = this.response.StatusCode;
+            realStatusCodePostForum.Should().Be(expectedStatusCode, $"Real code {realStatusCodePostForum} --- Expected code {expectedStatusCode}");
         }
 
         [Then(@"The message with the subject '(.*)' is in the theme '(.*)' list")]
@@ -54,19 +54,19 @@ namespace UserStories.AcceptanceTests.Steps.ForumService
         {
             switch (theme)
             {
-                case ("Automation"):
+                case "Automation":
                     var realAutomationMessageResult = this.forumListResponse.Result.AutomationMessage;
                     realAutomationMessageResult.Should().Contain(automationMessage => automationMessage.Subject.Equals(subject));
                     break;
-                case ("Development"):
+                case "Development":
                     var realDevelopmentMessageResult = this.forumListResponse.Result.DevelopmentMessage;
                     realDevelopmentMessageResult.Should().Contain(developmentMessage => developmentMessage.Subject.Equals(subject));
                     break;
-                case ("Security"):
+                case "Security":
                     var realSecurityMessageResult = this.forumListResponse.Result.SecurityMessage;
                     realSecurityMessageResult.Should().Contain(securityMessage => securityMessage.Subject.Equals(subject));
                     break;
-                case ("Testing"):
+                case "Testing":
                     var realTestingMessageResult = this.forumListResponse.Result.TestingMessage;
                     realTestingMessageResult.Should().Contain(testingMessage => testingMessage.Subject.Equals(subject));
                     break;

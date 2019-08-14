@@ -24,25 +24,23 @@ namespace APILayer.Client
         /// <returns>The <see cref="Task{TResult}"/></returns>
         protected async Task<SwaggerResponse<T>> CreateGenericSwaggerResponse<T>(HttpResponseMessage response) where T : class
         {
-            var headers = this.CreateHeadersDictionary(response);
             var status = ((int)response.StatusCode).ToString();
-            var responseData = await this.CreateResponseData(response, status, headers);
+            var responseData = await this.CreateResponseData(response, status);
 
             var result = default(T);
             result = JsonConvert.DeserializeObject<T>(responseData);
-            return new SwaggerResponse<T>(status, headers, result);
+            return new SwaggerResponse<T>(status, result);
         }
 
         protected async Task<SwaggerResponse> CreateSwaggerResponse(HttpResponseMessage response)
         {
-            var headers = this.CreateHeadersDictionary(response);
             var status = ((int)response.StatusCode).ToString();
 
-            var responseData = await this.CreateResponseData(response, status, headers);
-            return new SwaggerResponse(status, headers, responseData);
+            var responseData = await this.CreateResponseData(response, status);
+            return new SwaggerResponse(status, responseData);
         }
 
-        private async Task<string> CreateResponseData(HttpResponseMessage response, string status, IDictionary<string, IEnumerable<string>> headers)
+        private async Task<string> CreateResponseData(HttpResponseMessage response, string status)
         {
             var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             switch (status)
@@ -53,48 +51,36 @@ namespace APILayer.Client
                     return responseData;
 
                 default:
-                    this.ThrowSwaggerException(status, responseData, headers);
+                    this.ThrowSwaggerException(status, responseData);
                     return null;
             }
         }
 
-        private IDictionary<string, IEnumerable<string>> CreateHeadersDictionary(HttpResponseMessage response)
-        {
-            var headers = Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-
-            foreach (var item in response.Content.Headers)
-            {
-                headers[item.Key] = item.Value;
-            }
-
-            return headers;
-        }
-
-        private void ThrowSwaggerException(string status, string responseData, IDictionary<string, IEnumerable<string>> headers)
+        private void ThrowSwaggerException(string status, string responseData)
         {
             switch (status)
             {
                 case "400":
-                    throw new SwaggerException("Bad Request", status, responseData, headers, null);
+                    throw new SwaggerException("Bad Request", status, responseData, null);
 
                 case "404":
-                    throw new SwaggerException("Not Found", status, responseData, headers, null);
+                    throw new SwaggerException("Not Found", status, responseData, null);
 
                 case "409":
-                    throw new SwaggerException("Conflict", status, responseData, headers, null);
+                    throw new SwaggerException("Conflict", status, responseData, null);
 
                 case "413":
                 case "422":
-                    throw new SwaggerException("Client Error", status, responseData, headers, null);
+                    throw new SwaggerException("Client Error", status, responseData, null);
 
                 case "500":
-                    throw new SwaggerException("Server Error", status, responseData, headers, null);
+                    throw new SwaggerException("Server Error", status, responseData, null);
 
                 case "502":
-                    throw new SwaggerException("Issue description", status, responseData, headers, null);
+                    throw new SwaggerException("Issue description", status, responseData, null);
 
                 default:
-                    throw new SwaggerException($"The HTTP status code of the response was not expected ({status})", status, responseData, headers, null);
+                    throw new SwaggerException($"The HTTP status code of the response was not expected ({status})", status, responseData, null);
             }
         }
     }

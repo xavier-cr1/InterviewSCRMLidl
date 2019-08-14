@@ -4,20 +4,19 @@ using System.Text;
 
 namespace APILayer.Entities.Commom
 {
+    /// <summary>API service in swagger hub. Custom swagger exceptions.</summary>
+    /// <seealso cref="System.Exception" />
     public class SwaggerException : Exception
     {
         public string StatusCode { get; private set; }
 
         public string Response { get; private set; }
 
-        public IDictionary<string, IEnumerable<string>> Headers { get; private set; }
-
-        public SwaggerException(string message, string statusCode, string response, IDictionary<string, IEnumerable<string>> headers, System.Exception innerException)
+        public SwaggerException(string message, string statusCode, string response, Exception innerException)
             : base(message, innerException)
         {
             StatusCode = statusCode;
             Response = response;
-            Headers = headers;
         }
 
         public SwaggerException(string message, System.Exception exception)

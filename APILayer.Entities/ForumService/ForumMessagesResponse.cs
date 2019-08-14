@@ -9,15 +9,15 @@ namespace APILayer.Entities.ForumService
     public class ForumMessagesResponse
     {
         [JsonProperty("Automation")]
-        public ObservableCollection<ForumMessage> AutomationMessage { get; set; }
+        public ObservableCollection<AutomationMessage> AutomationMessage { get; set; }
 
         [JsonProperty("Security")]
-        public ObservableCollection<ForumMessage> SecurityMessage { get; set; }
+        public ObservableCollection<DevelopmentMessage> SecurityMessage { get; set; }
 
         [JsonProperty("Development")]
-        public ObservableCollection<ForumMessage> DevelopmentMessage { get; set; }
+        public ObservableCollection<SecurityMessage> DevelopmentMessage { get; set; }
 
         [JsonProperty("Testing")]
-        public ObservableCollection<ForumMessage> TestingMessage { get; set; }
+        public ObservableCollection<TestingMessage> TestingMessage { get; set; }
     }
 }
