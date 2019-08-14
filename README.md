@@ -22,4 +22,7 @@ INFO:
 	
 -> The tests will appear in test explorer. Open Test > Window > Test Explorer
 
--> Right click in the tests, Debug or Run.
+RUN:
+-> A) Right click in the tests, Debug or Run.
+
+-> B) Install NET Core in your pc > Open cmd window in the root folder of the project > Run dotnet test UserStories.AcceptanceTests
