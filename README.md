@@ -1,4 +1,4 @@
-# InterviewSCRMLidl
+# SpecflowBDD1
 
 INFO:
 -> If project fails when compiling:
