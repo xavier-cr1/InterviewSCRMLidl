@@ -5,7 +5,6 @@ using APILayer.Entities.MessageService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -39,9 +38,13 @@ namespace APILayer.Client
                     return await this.CreateSwaggerResponse(response);
                 }
             }
+            catch (SwaggerException sWex)
+            {
+                throw new SwaggerException(sWex.Message, sWex);
+            }
             catch (Exception ex)
             {
-                throw new SwaggerException(ex.Message, ex);
+                throw;
             }
         }
 
@@ -61,9 +64,13 @@ namespace APILayer.Client
                     return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
                 }
             }
+            catch (SwaggerException sWex)
+            {
+                throw new SwaggerException(sWex.Message, sWex);
+            }
             catch (Exception ex)
             {
-                throw new SwaggerException(ex.Message, ex);
+                throw;
             }
         }
     }

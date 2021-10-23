@@ -27,8 +27,7 @@ namespace APILayer.Client
             var status = ((int)response.StatusCode).ToString();
             var responseData = await this.CreateResponseData(response, status);
 
-            var result = default(T);
-            result = JsonConvert.DeserializeObject<T>(responseData);
+            T result = JsonConvert.DeserializeObject<T>(responseData);
             return new SwaggerResponse<T>(status, result);
         }
 

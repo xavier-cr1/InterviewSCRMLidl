@@ -60,9 +60,13 @@ namespace APILayer.Client
                     return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
                 }
             }
+            catch (SwaggerException sWex)
+            {
+                throw new SwaggerException(sWex.Message, sWex);
+            }
             catch (Exception ex)
             {
-                throw new SwaggerException(ex.Message, ex);
+                throw;
             }
         }
     }
