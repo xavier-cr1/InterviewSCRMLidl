@@ -1,4 +1,4 @@
-# SpecflowBDD1
+# SpecflowBDD1 - HttpClient
 
 INFO:
 -> If project fails when compiling:

@@ -1,22 +1,20 @@
 ﻿using APILayer.Entities;
-using APILayer.Entities.Commom;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace APILayer.Client
 {
-    public class RestApiBase
+    public abstract class RestApiBase
     {
         protected readonly string JsonMediaType = "application/json";
         protected readonly IConfigurationRoot ConfigurationRoot;
         protected readonly ISpecFlowOutputHelper _specFlowOutputHelper;
+        private readonly HttpClient httpClient;
 
         public RestApiBase(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
         {
@@ -27,8 +25,9 @@ namespace APILayer.Client
         /// <returns>The <see cref="Task{TResult}"/></returns>
         protected async Task<SwaggerResponse<T>> CreateGenericSwaggerResponse<T>(HttpResponseMessage response) where T : class
         {
+            // try deserializer json schema validator?
             var status = ((int)response.StatusCode).ToString();
-            var responseData = await this.CreateResponseData(response, status);
+            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             T result = JsonConvert.DeserializeObject<T>(responseData);
             return new SwaggerResponse<T>(status, result);
@@ -38,52 +37,56 @@ namespace APILayer.Client
         {
             var status = ((int)response.StatusCode).ToString();
 
-            var responseData = await this.CreateResponseData(response, status);
+            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return new SwaggerResponse(status, responseData);
         }
 
-        private async Task<string> CreateResponseData(HttpResponseMessage response, string status)
+        /// <summary>
+        /// Get request for http client.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns>The <see cref="Task{TResult}"/></returns>
+        public async Task<HttpResponseMessage> GetAsync(string url)
         {
-            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            switch (status)
-            {
-                case "200":
-                case "201":
-                case "204":
-                    return responseData;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.RelativeOrAbsolute));
 
-                default:
-                    this.ThrowSwaggerException(status, responseData);
-                    return null;
-            }
+            var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+
+            return response;
         }
 
-        private void ThrowSwaggerException(string status, string responseData)
+        /// <summary>
+        /// Post request for http client.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="item">The item.</param>
+        /// <returns>The <see cref="Task{TResult}"/></returns>
+        public async Task<HttpResponseMessage> PostAsync<T>(string url, T item)
         {
-            switch (status)
-            {
-                case "400":
-                    throw new SwaggerException("Bad Request", status, responseData, null);
+            var content = new StringContent(JsonConvert.SerializeObject(item));
 
-                case "404":
-                    throw new SwaggerException("Not Found", status, responseData, null);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
+            requestMessage.Content = content;
 
-                case "409":
-                    throw new SwaggerException("Conflict", status, responseData, null);
+            var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
 
-                case "413":
-                case "422":
-                    throw new SwaggerException("Client Error", status, responseData, null);
+            return response;
+        }
 
-                case "500":
-                    throw new SwaggerException("Server Error", status, responseData, null);
+        /// <summary>
+        /// Post request for http client without content.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="authorizationToken">The authorization token.</param>
+        /// <returns>The <see cref="Task{TResult}"/></returns>
+        public async Task<HttpResponseMessage> PostAsync(string url, string authorizationToken = null)
+        {
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
 
-                case "502":
-                    throw new SwaggerException("Issue description", status, responseData, null);
+            var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
 
-                default:
-                    throw new SwaggerException($"The HTTP status code of the response was not expected ({status})", status, responseData, null);
-            }
+            return response;
         }
     }
 }

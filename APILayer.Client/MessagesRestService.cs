@@ -1,6 +1,5 @@
 ﻿using APILayer.Client.Contracts;
 using APILayer.Entities;
-using APILayer.Entities.Commom;
 using APILayer.Entities.MessageService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -40,11 +39,6 @@ namespace APILayer.Client
                     return await this.CreateSwaggerResponse(response);
                 }
             }
-            catch (SwaggerException sWex)
-            {
-                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {messageServiceUrl}");
-                throw new SwaggerException(sWex.Message, sWex);
-            }
             catch (Exception ex)
             {
                 this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {messageServiceUrl}");
@@ -68,11 +62,6 @@ namespace APILayer.Client
                     this._specFlowOutputHelper.WriteLine($"calling endpoint: {messageServiceUrl}");
                     return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
                 }
-            }
-            catch (SwaggerException sWex)
-            {
-                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {messageServiceUrl}");
-                throw new SwaggerException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {

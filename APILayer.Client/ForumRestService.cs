@@ -1,11 +1,9 @@
 ﻿using APILayer.Client.Contracts;
 using APILayer.Entities;
-using APILayer.Entities.Commom;
 using APILayer.Entities.ForumService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,11 +40,6 @@ namespace APILayer.Client
                     return await this.CreateSwaggerResponse(response);
                 }
             }
-            catch (SwaggerException sWex)
-            {
-                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {forumServiceUrl}");
-                throw new SwaggerException(sWex.Message, sWex);
-            }
             catch (Exception ex)
             {
                 this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {forumServiceUrl}");
@@ -68,11 +61,6 @@ namespace APILayer.Client
 
                     return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
                 }
-            }
-            catch (SwaggerException sWex)
-            {
-                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {forumServiceUrl}");
-                throw new SwaggerException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {
