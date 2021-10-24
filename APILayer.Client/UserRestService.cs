@@ -42,7 +42,7 @@ namespace APILayer.Client
             catch (SwaggerException sWex)
             {
                 this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {usersServiceUrl}");
-                throw new HttpRequestException(sWex.Message, sWex);
+                throw new SwaggerException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {
@@ -69,7 +69,7 @@ namespace APILayer.Client
             catch (SwaggerException sWex)
             {
                 this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {usersServiceUrl}");
-                throw new HttpRequestException(sWex.Message, sWex);
+                throw new SwaggerException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {
