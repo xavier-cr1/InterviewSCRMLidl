@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace APILayer.Client
 {
@@ -15,10 +16,12 @@ namespace APILayer.Client
     {
         protected readonly string JsonMediaType = "application/json";
         protected readonly IConfigurationRoot ConfigurationRoot;
+        protected readonly ISpecFlowOutputHelper _specFlowOutputHelper;
 
-        public RestApiBase(IConfigurationRoot configurationRoot)
+        public RestApiBase(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
         {
             this.ConfigurationRoot = configurationRoot;
+            this._specFlowOutputHelper = specFlowOutputHelper;
         }
 
         /// <returns>The <see cref="Task{TResult}"/></returns>

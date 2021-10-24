@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace APILayer.Client
 {
@@ -16,8 +17,8 @@ namespace APILayer.Client
     {
         private string messageServiceUrl => this.ConfigurationRoot.GetSection("AppConfiguration")["MessageAPIService"];
 
-        public MessagesRestService(IConfigurationRoot configurationRoot)
-            : base(configurationRoot)
+        public MessagesRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
+            : base(configurationRoot, specFlowOutputHelper)
         {
         }
 
@@ -35,15 +36,18 @@ namespace APILayer.Client
                     // Create request
                     var response = await client.PostAsync($"{messageServiceUrl}/{username}", content);
 
+                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {messageServiceUrl}");
                     return await this.CreateSwaggerResponse(response);
                 }
             }
             catch (SwaggerException sWex)
             {
-                throw new SwaggerException(sWex.Message, sWex);
+                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {messageServiceUrl}");
+                throw new HttpRequestException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {
+                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {messageServiceUrl}");
                 throw;
             }
         }
@@ -61,15 +65,18 @@ namespace APILayer.Client
 
                     var response = await client.GetAsync($"{messageServiceUrl}/{username}");
 
+                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {messageServiceUrl}");
                     return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
                 }
             }
             catch (SwaggerException sWex)
             {
-                throw new SwaggerException(sWex.Message, sWex);
+                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {messageServiceUrl}");
+                throw new HttpRequestException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {
+                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {messageServiceUrl}");
                 throw;
             }
         }

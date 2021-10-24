@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using TechTalk.SpecFlow.Infrastructure;
 
 namespace APILayer.Client
 {
@@ -18,8 +19,8 @@ namespace APILayer.Client
 
         private readonly string themeAttribute = "?theme=";
 
-        public ForumRestService(IConfigurationRoot configurationRoot)
-            : base(configurationRoot)
+        public ForumRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
+            : base(configurationRoot, specFlowOutputHelper)
         {
         }
 
@@ -35,14 +36,21 @@ namespace APILayer.Client
                     var content = new StringContent(JsonConvert.SerializeObject(forumRequest), Encoding.UTF8, this.JsonMediaType);
 
                     // Create request
+                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {forumServiceUrl}");
                     var response = await client.PostAsync(forumServiceUrl, content);
 
                     return await this.CreateSwaggerResponse(response);
                 }
             }
+            catch (SwaggerException sWex)
+            {
+                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {forumServiceUrl}");
+                throw new HttpRequestException(sWex.Message, sWex);
+            }
             catch (Exception ex)
             {
-                throw new SwaggerException(ex.Message, ex);
+                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {forumServiceUrl}");
+                throw;
             }
         }
 
@@ -54,7 +62,8 @@ namespace APILayer.Client
                 {
                     client.Timeout = TimeSpan.FromSeconds(60);
 
-                    // Response     
+                    // Response
+                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {forumServiceUrl}");
                     var response = string.IsNullOrEmpty(theme) ? await client.GetAsync(forumServiceUrl) : await client.GetAsync($"{forumServiceUrl}{themeAttribute}{theme}");
 
                     return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
@@ -62,10 +71,12 @@ namespace APILayer.Client
             }
             catch (SwaggerException sWex)
             {
-                throw new SwaggerException(sWex.Message, sWex);
+                this._specFlowOutputHelper.WriteLine($"swagger exception after calling the endpoint: {forumServiceUrl}");
+                throw new HttpRequestException(sWex.Message, sWex);
             }
             catch (Exception ex)
             {
+                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {forumServiceUrl}");
                 throw;
             }
         }
