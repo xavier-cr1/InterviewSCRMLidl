@@ -15,8 +15,8 @@ namespace APILayer.Client
     {
         private string usersServiceUrl => this.ConfigurationRoot.GetSection("AppConfiguration")["UsersAPIService"];
 
-        public UserRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
-            : base(configurationRoot, specFlowOutputHelper)
+        public UserRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper, HttpClient httpClient)
+            : base(configurationRoot, specFlowOutputHelper, httpClient)
         {
         }
 

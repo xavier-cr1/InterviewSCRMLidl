@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow.Infrastructure;
@@ -16,10 +17,11 @@ namespace APILayer.Client
         protected readonly ISpecFlowOutputHelper _specFlowOutputHelper;
         private readonly HttpClient httpClient;
 
-        public RestApiBase(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
+        public RestApiBase(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper, HttpClient httpClient)
         {
             this.ConfigurationRoot = configurationRoot;
             this._specFlowOutputHelper = specFlowOutputHelper;
+            this.httpClient = httpClient;
         }
 
         /// <returns>The <see cref="Task{TResult}"/></returns>
@@ -50,9 +52,17 @@ namespace APILayer.Client
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.RelativeOrAbsolute));
 
-            var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
-
-            return response;
+            try
+            {
+                using (var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None))
+                {
+                    return response;
+                }
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -64,7 +74,7 @@ namespace APILayer.Client
         /// <returns>The <see cref="Task{TResult}"/></returns>
         public async Task<HttpResponseMessage> PostAsync<T>(string url, T item)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(item));
+            var content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, this.JsonMediaType);
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
             requestMessage.Content = content;

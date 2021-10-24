@@ -17,8 +17,8 @@ namespace APILayer.Client
 
         private readonly string themeAttribute = "?theme=";
 
-        public ForumRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
-            : base(configurationRoot, specFlowOutputHelper)
+        public ForumRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper, HttpClient httpClient)
+            : base(configurationRoot, specFlowOutputHelper, httpClient)
         {
         }
 
@@ -26,17 +26,8 @@ namespace APILayer.Client
         {
             try
             {
-                using (var client = new HttpClient())
+                using (var response = await this.PostAsync(forumServiceUrl, forumRequest))
                 {
-                    client.Timeout = TimeSpan.FromSeconds(30);
-
-                    // Create content
-                    var content = new StringContent(JsonConvert.SerializeObject(forumRequest), Encoding.UTF8, this.JsonMediaType);
-
-                    // Create request
-                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {forumServiceUrl}");
-                    var response = await client.PostAsync(forumServiceUrl, content);
-
                     return await this.CreateSwaggerResponse(response);
                 }
             }

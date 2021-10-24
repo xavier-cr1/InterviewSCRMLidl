@@ -1,6 +1,7 @@
 using BoDi;
 using CrossLayer.Containers;
 using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 using TechTalk.SpecFlow;
 
 namespace UserStories.AcceptanceTests
@@ -21,6 +22,10 @@ namespace UserStories.AcceptanceTests
 
             // Inject configuration to object container
             this.RegisterConfigurationToObjectContainer();
+
+            //Inject httpClient
+            this.RegisterHttpClient();
+            this.objectContainer.Resolve<HttpClient>();
         }
 
         /// <summary>
@@ -40,6 +45,11 @@ namespace UserStories.AcceptanceTests
                 .Build();
 
             this.objectContainer.RegisterInstanceAs(configurationRoot);
+        }
+
+        private void RegisterHttpClient()
+        {
+            this.objectContainer.RegisterInstanceAs(new HttpClient());
         }
 
         private void RegisterAppContainerToObjectContainer()

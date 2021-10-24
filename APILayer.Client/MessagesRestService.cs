@@ -16,8 +16,8 @@ namespace APILayer.Client
     {
         private string messageServiceUrl => this.ConfigurationRoot.GetSection("AppConfiguration")["MessageAPIService"];
 
-        public MessagesRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper)
-            : base(configurationRoot, specFlowOutputHelper)
+        public MessagesRestService(IConfigurationRoot configurationRoot, ISpecFlowOutputHelper specFlowOutputHelper, HttpClient httpClient)
+            : base(configurationRoot, specFlowOutputHelper, httpClient)
         {
         }
 
