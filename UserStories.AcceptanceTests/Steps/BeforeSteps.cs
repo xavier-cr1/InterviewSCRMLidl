@@ -1,6 +1,7 @@
 using BoDi;
 using CrossLayer.Containers;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Net.Http;
 using TechTalk.SpecFlow;
 
@@ -49,7 +50,7 @@ namespace UserStories.AcceptanceTests
 
         private void RegisterHttpClient()
         {
-            this.objectContainer.RegisterInstanceAs(new HttpClient());
+            this.objectContainer.RegisterInstanceAs(new HttpClient() { Timeout = TimeSpan.FromSeconds(30) });
         }
 
         private void RegisterAppContainerToObjectContainer()
