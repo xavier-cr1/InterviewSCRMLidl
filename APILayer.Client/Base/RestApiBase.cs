@@ -74,14 +74,28 @@ namespace APILayer.Client
         /// <returns>The <see cref="Task{TResult}"/></returns>
         public async Task<HttpResponseMessage> PostAsync<T>(string url, T item)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, this.JsonMediaType);
+            try
+            {
+                var content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, this.JsonMediaType);
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
-            requestMessage.Content = content;
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
+                requestMessage.Content = content;
 
-            var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+                this._specFlowOutputHelper.WriteLine($"Sent POST request to url: {url}");
+                var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
 
-            return response;
+                return response;
+            }
+            catch (TimeoutException timeoutEx)
+            {
+                this._specFlowOutputHelper.WriteLine($"Timeout exception: {timeoutEx.Message} when trying to request a POST in url: {url}");
+                return new HttpResponseMessage(System.Net.HttpStatusCode.RequestTimeout);
+            }
+            catch (Exception ex)
+            {
+                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when trying to request a POST in url: {url}");
+                return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+            }
         }
 
         /// <summary>
@@ -90,7 +104,7 @@ namespace APILayer.Client
         /// <param name="url">The URL.</param>
         /// <param name="authorizationToken">The authorization token.</param>
         /// <returns>The <see cref="Task{TResult}"/></returns>
-        public async Task<HttpResponseMessage> PostAsync(string url, string authorizationToken = null)
+        public async Task<HttpResponseMessage> PostAsync(string url)
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
 

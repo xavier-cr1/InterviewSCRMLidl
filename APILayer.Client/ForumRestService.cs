@@ -24,17 +24,9 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> PostNewForumMessageAsync(ForumMessage forumRequest)
         {
-            try
+            using (var response = await this.PostAsync(forumServiceUrl, forumRequest))
             {
-                using (var response = await this.PostAsync(forumServiceUrl, forumRequest))
-                {
-                    return await this.CreateSwaggerResponse(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {forumServiceUrl}");
-                throw;
+                return await this.CreateSwaggerResponse(response);
             }
         }
 
