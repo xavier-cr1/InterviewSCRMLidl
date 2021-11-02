@@ -46,6 +46,7 @@ namespace UserStories.AcceptanceTests.Steps.ForumService
         public void ThenTheStatusCodeForCreatingAMessageInTheForumIs(string expectedStatusCode)
         {
             var realStatusCodePostForum = this.response.StatusCode;
+            this.response.Body.Should().Be("message created", $"Real body message {this.response.Body} --- Expected body message \"message created\"");
             realStatusCodePostForum.Should().Be(expectedStatusCode, $"Real code {realStatusCodePostForum} --- Expected code {expectedStatusCode}");
         }
 

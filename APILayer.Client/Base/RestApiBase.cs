@@ -94,7 +94,7 @@ namespace APILayer.Client
             catch (Exception ex)
             {
                 this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when trying to request a POST in url: {url}");
-                return new HttpResponseMessage(System.Net.HttpStatusCode.InternalServerError);
+                throw new Exception(ex.Message, ex.InnerException);
             }
         }
 
