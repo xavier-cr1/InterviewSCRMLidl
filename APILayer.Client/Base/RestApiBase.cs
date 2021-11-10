@@ -72,7 +72,7 @@ namespace APILayer.Client
 
                 this._specFlowOutputHelper.WriteLine($"Sending GET request to url: {url}");
                 var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
-                
+
                 return response;
             }
             catch (TimeoutException timeoutEx)

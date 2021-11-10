@@ -4,6 +4,8 @@ using APILayer.Entities.MessageService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -33,7 +35,12 @@ namespace APILayer.Client
         {
             using (var response = await this.GetAsync($"{messageServiceUrl}/{username}"))
             {
-                // Response
+                if(!response.IsSuccessStatusCode)
+                {
+                    var emptyPrivateMessageResponse = new PrivateMessageResponse { Messages = new ObservableCollection<PrivateMessage>(), Username = "" };
+                    var emptyPrivateMessageSwaggerResponse = new SwaggerResponse<PrivateMessageResponse>(((int)response.StatusCode).ToString(), emptyPrivateMessageResponse) { Body = response.ReasonPhrase };
+                    return emptyPrivateMessageSwaggerResponse;
+                }
                 //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
                 return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
             }

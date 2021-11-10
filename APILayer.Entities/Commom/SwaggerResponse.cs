@@ -6,9 +6,9 @@ namespace APILayer.Entities
     /// <summary>API service in swagger hub. Generic swagger response.</summary>
     public class SwaggerResponse
     {
-        public string StatusCode { get; private set; }
+        public string StatusCode { get; set; }
 
-        public string Body { get; private set; }
+        public string Body { get; set; }
 
         public SwaggerResponse(string statusCode)
         {
@@ -25,7 +25,7 @@ namespace APILayer.Entities
     /// <typeparam name="TResult">The type of the result.</typeparam>
     public class SwaggerResponse<TResult> : SwaggerResponse
     {
-        public TResult Result { get; private set; }
+        public TResult Result { get; set; }
 
         public SwaggerResponse(string statusCode, TResult result)
             : base(statusCode)
