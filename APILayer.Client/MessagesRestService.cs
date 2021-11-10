@@ -23,50 +23,19 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> SendPrivateMessageAsync(string username, PrivateMessage privateMessageRequest)
         {
-            try
+            using (var response = await this.PostAsync($"{messageServiceUrl}/{username}", privateMessageRequest))
             {
-                using (var client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(30);
-
-                    // Create content
-                    var content = new StringContent(JsonConvert.SerializeObject(privateMessageRequest), Encoding.UTF8, this.JsonMediaType);
-
-                    // Create request
-                    var response = await client.PostAsync($"{messageServiceUrl}/{username}", content);
-
-                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {messageServiceUrl}");
-                    return await this.CreateSwaggerResponse(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {messageServiceUrl}");
-                throw;
+                return await this.CreateSwaggerResponse(response);
             }
         }
 
         public async Task<SwaggerResponse<PrivateMessageResponse>> GetPrivateMessageListAsync(string username, string password)
         {
-            try
+            using (var response = await this.GetAsync($"{messageServiceUrl}/{username}"))
             {
-                using (var client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(60);
-
-                    // Response
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
-
-                    var response = await client.GetAsync($"{messageServiceUrl}/{username}");
-
-                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {messageServiceUrl}");
-                    return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {messageServiceUrl}");
-                throw;
+                // Response
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
+                return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
             }
         }
     }

@@ -28,19 +28,35 @@ namespace APILayer.Client
         protected async Task<SwaggerResponse<T>> CreateGenericSwaggerResponse<T>(HttpResponseMessage response) where T : class
         {
             // try deserializer json schema validator?
-            var status = ((int)response.StatusCode).ToString();
-            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            try
+            {
+                var status = ((int)response.StatusCode).ToString();
+                var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            T result = JsonConvert.DeserializeObject<T>(responseData);
-            return new SwaggerResponse<T>(status, result);
+                T result = JsonConvert.DeserializeObject<T>(responseData);
+                return new SwaggerResponse<T>(status, result);
+            }
+            catch(Exception ex)
+            {
+                this._specFlowOutputHelper.WriteLine($"Failed to deserialize generic swagger response: {ex.Message}");
+                throw;
+            }
         }
 
         protected async Task<SwaggerResponse> CreateSwaggerResponse(HttpResponseMessage response)
         {
-            var status = ((int)response.StatusCode).ToString();
+            try
+            {
+                var status = ((int)response.StatusCode).ToString();
 
-            var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return new SwaggerResponse(status, responseData);
+                var responseData = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                return new SwaggerResponse(status, responseData);
+            }
+            catch (Exception ex)
+            {
+                this._specFlowOutputHelper.WriteLine($"Failed to deserialize generic swagger response: {ex.Message}");
+                throw;
+            }
         }
 
         /// <summary>
@@ -48,19 +64,25 @@ namespace APILayer.Client
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns>The <see cref="Task{TResult}"/></returns>
-        public async Task<HttpResponseMessage> GetAsync(string url)
+        protected async Task<HttpResponseMessage> GetAsync(string url)
         {
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.RelativeOrAbsolute));
-
             try
             {
-                using (var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None))
-                {
-                    return response;
-                }
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.RelativeOrAbsolute));
+
+                this._specFlowOutputHelper.WriteLine($"Sending GET request to url: {url}");
+                var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+                
+                return response;
             }
-            catch(Exception ex)
+            catch (TimeoutException timeoutEx)
             {
+                this._specFlowOutputHelper.WriteLine($"Timeout exception: {timeoutEx.Message} when trying to request a POST in url: {url}");
+                return new HttpResponseMessage(System.Net.HttpStatusCode.RequestTimeout);
+            }
+            catch (Exception ex)
+            {
+                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when trying to request a POST in url: {url}");
                 throw;
             }
         }
@@ -72,7 +94,7 @@ namespace APILayer.Client
         /// <param name="url">The URL.</param>
         /// <param name="item">The item.</param>
         /// <returns>The <see cref="Task{TResult}"/></returns>
-        public async Task<HttpResponseMessage> PostAsync<T>(string url, T item)
+        protected async Task<HttpResponseMessage> PostAsync<T>(string url, T item)
         {
             try
             {
@@ -81,7 +103,7 @@ namespace APILayer.Client
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
                 requestMessage.Content = content;
 
-                this._specFlowOutputHelper.WriteLine($"Sent POST request to url: {url}");
+                this._specFlowOutputHelper.WriteLine($"Sending POST request to url: {url}");
                 var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
 
                 return response;
@@ -104,7 +126,7 @@ namespace APILayer.Client
         /// <param name="url">The URL.</param>
         /// <param name="authorizationToken">The authorization token.</param>
         /// <returns>The <see cref="Task{TResult}"/></returns>
-        public async Task<HttpResponseMessage> PostAsync(string url)
+        protected async Task<HttpResponseMessage> PostAsync(string url)
         {
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
 

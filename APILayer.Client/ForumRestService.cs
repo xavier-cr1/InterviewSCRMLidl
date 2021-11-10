@@ -32,23 +32,11 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse<ForumMessagesResponse>> GetForumMessagesListByThemeAsync(string theme)
         {
-            try
-            {
-                using (var client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(60);
+            var getForumMessageRequestUrl = string.IsNullOrEmpty(theme) ? forumServiceUrl : $"{forumServiceUrl}{themeAttribute}{theme}";
 
-                    // Response
-                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {forumServiceUrl}");
-                    var response = string.IsNullOrEmpty(theme) ? await client.GetAsync(forumServiceUrl) : await client.GetAsync($"{forumServiceUrl}{themeAttribute}{theme}");
-
-                    return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
-                }
-            }
-            catch (Exception ex)
+            using (var response = await this.GetAsync(getForumMessageRequestUrl))
             {
-                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {forumServiceUrl}");
-                throw;
+                return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
             }
         }
     }
