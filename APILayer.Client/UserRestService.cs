@@ -4,6 +4,7 @@ using APILayer.Entities.UserService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,48 +23,25 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> PostNewUserAsync(User userRequest)
         {
-            try
+            using (var response = await this.PostAsync($"{usersServiceUrl}", userRequest))
             {
-                using (var client = new HttpClient())
-                {
-                    client.Timeout = TimeSpan.FromSeconds(30);
-
-                    // Create content
-                    var content = new StringContent(JsonConvert.SerializeObject(userRequest), Encoding.UTF8, this.JsonMediaType);
-
-                    // Create request
-                    var response = await client.PostAsync(usersServiceUrl, content);
-                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {usersServiceUrl}");
-
-                    return await this.CreateSwaggerResponse(response);
-                }
-            }
-            catch (Exception ex)
-            {
-                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {usersServiceUrl}");
-                throw;
+                return await this.CreateSwaggerResponse(response);
             }
         }
 
         public async Task<SwaggerResponse<UserListResponse>> GetUserListAsync()
         {
-            try
+            using (var response = await this.GetAsync($"{usersServiceUrl}"))
             {
-                using (var client = new HttpClient())
+                if(!response.IsSuccessStatusCode)
                 {
-                    client.Timeout = TimeSpan.FromSeconds(60);
+                    var emptyUserListResponse = new UserListResponse { Users = new ObservableCollection<User>() };
+                    var emptyUserListSwaggerResponse = new SwaggerResponse<UserListResponse>(((int)response.StatusCode).ToString(), emptyUserListResponse) { Body = response.ReasonPhrase };
 
-                    // Response
-                    var response = await client.GetAsync(usersServiceUrl);
-
-                    this._specFlowOutputHelper.WriteLine($"calling endpoint: {usersServiceUrl}");
-                    return await this.CreateGenericSwaggerResponse<UserListResponse>(response);
+                    return emptyUserListSwaggerResponse;
                 }
-            }
-            catch (Exception ex)
-            {
-                this._specFlowOutputHelper.WriteLine($"Unhandled exception: {ex.Message} when calling the endpoint: {usersServiceUrl}");
-                throw;
+
+                return await this.CreateGenericSwaggerResponse<UserListResponse>(response);
             }
         }
     }
