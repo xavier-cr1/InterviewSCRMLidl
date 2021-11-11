@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace APILayer.Client
             }
             catch(Exception ex)
             {
-                this._specFlowOutputHelper.WriteLine($"Failed to deserialize generic swagger response: {ex.Message}");
+                this._specFlowOutputHelper.WriteLine($"Failed to deserialize into type swagger response: {ex.Message}");
                 throw;
             }
         }
@@ -54,7 +55,7 @@ namespace APILayer.Client
             }
             catch (Exception ex)
             {
-                this._specFlowOutputHelper.WriteLine($"Failed to deserialize generic swagger response: {ex.Message}");
+                this._specFlowOutputHelper.WriteLine($"Failed to return a swagger response : {ex.Message}");
                 throw;
             }
         }
@@ -63,12 +64,18 @@ namespace APILayer.Client
         /// Get request for http client.
         /// </summary>
         /// <param name="url">The URL.</param>
+        /// <param name="userAutorization">The user autorization if needed.</param>
         /// <returns>The <see cref="Task{TResult}"/></returns>
-        protected async Task<HttpResponseMessage> GetAsync(string url)
+        protected async Task<HttpResponseMessage> GetAsync(string url, string userAutorization = "")
         {
             try
             {
                 var requestMessage = new HttpRequestMessage(HttpMethod.Get, new Uri(url, UriKind.RelativeOrAbsolute));
+
+                if(!string.IsNullOrEmpty(userAutorization))
+                {
+                    this.httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", userAutorization);
+                }
 
                 this._specFlowOutputHelper.WriteLine($"Sending GET request to url: {url}");
                 var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);

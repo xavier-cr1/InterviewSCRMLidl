@@ -105,15 +105,16 @@ this.FeatureBackground();
             table2.AddRow(new string[] {
                         "Sending to myself a test message"});
 #line 11
-    testRunner.Given("The username \'xaviercr1\' receives a private message with the following properties" +
-                    "", ((string)(null)), table2, "Given ");
+    testRunner.Given("The username \'xaviercr1\' sends a private message with the following properties", ((string)(null)), table2, "Given ");
 #line 14
     testRunner.Then("The status code for sending a private message in the forum is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 15
-    testRunner.When("The username \'xaviercr1\' and password \'Xavier1234.\' obtains its private message l" +
-                    "ist with the new message \'Sending to myself a test message\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("The username \'xaviercr1\' and password \'Xavier1234.\' sends a request to obtain its" +
+                    " private message list", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 16
     testRunner.And("The status code for obtaining the private message list is \'200\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 17
+    testRunner.Then("The message list has the new message \'Sending to myself a test message\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

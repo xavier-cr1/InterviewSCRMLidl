@@ -33,7 +33,9 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse<PrivateMessageResponse>> GetPrivateMessageListAsync(string username, string password)
         {
-            using (var response = await this.GetAsync($"{messageServiceUrl}/{username}"))
+            var userAuthorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+
+            using (var response = await this.GetAsync($"{messageServiceUrl}/{username}", userAuthorization))
             {
                 if(!response.IsSuccessStatusCode)
                 {
@@ -41,7 +43,7 @@ namespace APILayer.Client
                     var emptyPrivateMessageSwaggerResponse = new SwaggerResponse<PrivateMessageResponse>(((int)response.StatusCode).ToString(), emptyPrivateMessageResponse) { Body = response.ReasonPhrase };
                     return emptyPrivateMessageSwaggerResponse;
                 }
-                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
+
                 return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
             }
         }

@@ -22,19 +22,17 @@ namespace UserStories.AcceptanceTests.Steps.MessageService
             this.messagesServiceRestApi = messagesServiceRestApi;
         }
 
-        [Given(@"The username '(.*)' receives a private message with the following properties")]
+        [Given(@"The username '(.*)' sends a private message with the following properties")]
         public async Task GivenTheUsernameReceivesAPrivateMessageWithTheFollowingProperties(string username, Table table)
         {
             this.forumRequest = table.CreateInstance<PrivateMessage>();
             this.response = await this.messagesServiceRestApi.SendPrivateMessageAsync(username, this.forumRequest);
         }
 
-        [When(@"The username '(.*)' and password '(.*)' obtains its private message list with the new message '(.*)'")]
-        public async Task WhenTheUsernameObtainsItsPrivateMessageList(string username, string password, string newMessage)
+        [When(@"The username '(.*)' and password '(.*)' sends a request to obtain its private message list")]
+        public async Task WhenTheUserRequestToObtainItsPrivateMessageList(string username, string password)
         {
             this.messagesListResponse = await this.messagesServiceRestApi.GetPrivateMessageListAsync(username, password);
-            var realPrivateMessageList = this.messagesListResponse.Result.Messages;
-            realPrivateMessageList.Should().Contain(privateMessage => privateMessage.Message.Equals(newMessage));
         }
 
         [When(@"The status code for obtaining the private message list is '(.*)'")]
@@ -49,6 +47,13 @@ namespace UserStories.AcceptanceTests.Steps.MessageService
         {
             var realStatusCodePostPrivateMessage = this.response.StatusCode;
             realStatusCodePostPrivateMessage.Should().Be(expectedStatusCode, $"Real code {realStatusCodePostPrivateMessage} --- Expected code {expectedStatusCode}");
+        }
+
+        [Then(@"The message list has the new message '(.*)'")]
+        public void TheMessageListHasTheNewMessage(string newMessage)
+        {
+            var realPrivateMessageList = this.messagesListResponse.Result.Messages;
+            realPrivateMessageList.Should().Contain(privateMessage => privateMessage.Message.Equals(newMessage));
         }
     }
 }

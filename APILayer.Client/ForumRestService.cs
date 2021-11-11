@@ -4,6 +4,7 @@ using APILayer.Entities.ForumService;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,6 +37,17 @@ namespace APILayer.Client
 
             using (var response = await this.GetAsync(getForumMessageRequestUrl))
             {
+                if (!response.IsSuccessStatusCode)
+                {
+                    var emptyGetForumMessagesResponse = new ForumMessagesResponse { AutomationMessage = new ObservableCollection<AutomationMessage>(),
+                        SecurityMessage = new ObservableCollection<SecurityMessage>(), DevelopmentMessage = new ObservableCollection<DevelopmentMessage>(),
+                        TestingMessage = new ObservableCollection<TestingMessage>()
+                    };
+
+                    var emptyGetForumMessagesSwaggerResponse = new SwaggerResponse<ForumMessagesResponse>(((int)response.StatusCode).ToString(), emptyGetForumMessagesResponse) { Body = response.ReasonPhrase };
+                    return emptyGetForumMessagesSwaggerResponse;
+                }
+
                 return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
             }
         }
