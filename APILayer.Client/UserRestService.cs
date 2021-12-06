@@ -23,26 +23,24 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> PostNewUserAsync(User userRequest)
         {
-            using (var response = await this.PostAsync($"{usersServiceUrl}", userRequest))
-            {
-                return await this.CreateSwaggerResponse(response);
-            }
+            var response = await this.PostAsync($"{usersServiceUrl}", userRequest);
+            
+            return await this.CreateSwaggerResponse(response);
         }
 
         public async Task<SwaggerResponse<UserListResponse>> GetUserListAsync()
         {
-            using (var response = await this.GetAsync($"{usersServiceUrl}"))
+            var response = await this.GetAsync($"{usersServiceUrl}");
+
+            if(!response.IsSuccessStatusCode)
             {
-                if(!response.IsSuccessStatusCode)
-                {
-                    var emptyUserListResponse = new UserListResponse { Users = new ObservableCollection<User>() };
-                    var emptyUserListSwaggerResponse = new SwaggerResponse<UserListResponse>(((int)response.StatusCode).ToString(), emptyUserListResponse) { Body = response.ReasonPhrase };
+                var emptyUserListResponse = new UserListResponse { Users = new ObservableCollection<User>() };
+                var emptyUserListSwaggerResponse = new SwaggerResponse<UserListResponse>(((int)response.StatusCode).ToString(), emptyUserListResponse) { Body = response.ReasonPhrase };
 
-                    return emptyUserListSwaggerResponse;
-                }
-
-                return await this.CreateGenericSwaggerResponse<UserListResponse>(response);
+                return emptyUserListSwaggerResponse;
             }
+            
+            return await this.CreateGenericSwaggerResponse<UserListResponse>(response);
         }
     }
 }

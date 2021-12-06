@@ -25,31 +25,28 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> PostNewForumMessageAsync(ForumMessage forumRequest)
         {
-            using (var response = await this.PostAsync(forumServiceUrl, forumRequest))
-            {
-                return await this.CreateSwaggerResponse(response);
-            }
+            var response = await this.PostAsync(forumServiceUrl, forumRequest);
+
+            return await this.CreateSwaggerResponse(response);
         }
 
         public async Task<SwaggerResponse<ForumMessagesResponse>> GetForumMessagesListByThemeAsync(string theme)
         {
             var getForumMessageRequestUrl = string.IsNullOrEmpty(theme) ? forumServiceUrl : $"{forumServiceUrl}{themeAttribute}{theme}";
 
-            using (var response = await this.GetAsync(getForumMessageRequestUrl))
+            var response = await this.GetAsync(getForumMessageRequestUrl);
+            if (!response.IsSuccessStatusCode)
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    var emptyGetForumMessagesResponse = new ForumMessagesResponse { AutomationMessage = new ObservableCollection<AutomationMessage>(),
-                        SecurityMessage = new ObservableCollection<SecurityMessage>(), DevelopmentMessage = new ObservableCollection<DevelopmentMessage>(),
-                        TestingMessage = new ObservableCollection<TestingMessage>()
-                    };
+                var emptyGetForumMessagesResponse = new ForumMessagesResponse { AutomationMessage = new ObservableCollection<AutomationMessage>(),
+                    SecurityMessage = new ObservableCollection<SecurityMessage>(), DevelopmentMessage = new ObservableCollection<DevelopmentMessage>(),
+                    TestingMessage = new ObservableCollection<TestingMessage>()
+                };
 
-                    var emptyGetForumMessagesSwaggerResponse = new SwaggerResponse<ForumMessagesResponse>(((int)response.StatusCode).ToString(), emptyGetForumMessagesResponse) { Body = response.ReasonPhrase };
-                    return emptyGetForumMessagesSwaggerResponse;
-                }
-
-                return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
+                var emptyGetForumMessagesSwaggerResponse = new SwaggerResponse<ForumMessagesResponse>(((int)response.StatusCode).ToString(), emptyGetForumMessagesResponse) { Body = response.ReasonPhrase };
+                return emptyGetForumMessagesSwaggerResponse;
             }
+
+            return await this.CreateGenericSwaggerResponse<ForumMessagesResponse>(response);
         }
     }
 }

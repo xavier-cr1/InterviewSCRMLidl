@@ -25,27 +25,25 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> SendPrivateMessageAsync(string username, PrivateMessage privateMessageRequest)
         {
-            using (var response = await this.PostAsync($"{messageServiceUrl}/{username}", privateMessageRequest))
-            {
-                return await this.CreateSwaggerResponse(response);
-            }
+            var response = await this.PostAsync($"{messageServiceUrl}/{username}", privateMessageRequest);
+
+            return await this.CreateSwaggerResponse(response);
         }
 
         public async Task<SwaggerResponse<PrivateMessageResponse>> GetPrivateMessageListAsync(string username, string password)
         {
             var userAuthorization = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
 
-            using (var response = await this.GetAsync($"{messageServiceUrl}/{username}", userAuthorization))
-            {
-                if(!response.IsSuccessStatusCode)
-                {
-                    var emptyPrivateMessageResponse = new PrivateMessageResponse { Messages = new ObservableCollection<PrivateMessage>(), Username = "" };
-                    var emptyPrivateMessageSwaggerResponse = new SwaggerResponse<PrivateMessageResponse>(((int)response.StatusCode).ToString(), emptyPrivateMessageResponse) { Body = response.ReasonPhrase };
-                    return emptyPrivateMessageSwaggerResponse;
-                }
+            var response = await this.GetAsync($"{messageServiceUrl}/{username}", userAuthorization);
 
-                return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
+            if(!response.IsSuccessStatusCode)
+            {
+                var emptyPrivateMessageResponse = new PrivateMessageResponse { Messages = new ObservableCollection<PrivateMessage>(), Username = "" };
+                var emptyPrivateMessageSwaggerResponse = new SwaggerResponse<PrivateMessageResponse>(((int)response.StatusCode).ToString(), emptyPrivateMessageResponse) { Body = response.ReasonPhrase };
+                return emptyPrivateMessageSwaggerResponse;
             }
+
+            return await this.CreateGenericSwaggerResponse<PrivateMessageResponse>(response);
         }
     }
 }
