@@ -14,7 +14,7 @@ namespace APILayer.Client
 {
     public class ForumRestService : RestApiBase, IForumServiceRestApi
     {
-        private string forumServiceUrl => this.ConfigurationRoot.GetSection("AppConfiguration")["ForumAPIService"];
+        private string ForumServiceUrl => this.ConfigurationRoot.GetSection("AppConfiguration")["ForumAPIService"];
 
         private readonly string themeAttribute = "?theme=";
 
@@ -25,14 +25,14 @@ namespace APILayer.Client
 
         public async Task<SwaggerResponse> PostNewForumMessageAsync(ForumMessage forumRequest)
         {
-            var response = await this.PostAsync(forumServiceUrl, forumRequest);
+            var response = await this.PostAsync(ForumServiceUrl, forumRequest);
 
             return await this.CreateSwaggerResponse(response);
         }
 
         public async Task<SwaggerResponse<ForumMessagesResponse>> GetForumMessagesListByThemeAsync(string theme)
         {
-            var getForumMessageRequestUrl = string.IsNullOrEmpty(theme) ? forumServiceUrl : $"{forumServiceUrl}{themeAttribute}{theme}";
+            var getForumMessageRequestUrl = string.IsNullOrEmpty(theme) ? ForumServiceUrl : $"{ForumServiceUrl}{themeAttribute}{theme}";
 
             var response = await this.GetAsync(getForumMessageRequestUrl);
             if (!response.IsSuccessStatusCode)
