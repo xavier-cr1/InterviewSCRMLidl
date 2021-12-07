@@ -107,8 +107,10 @@ namespace APILayer.Client
             {
                 var content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, this.JsonMediaType);
 
-                var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute));
-                requestMessage.Content = content;
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(url, UriKind.RelativeOrAbsolute))
+                {
+                    Content = content
+                };
 
                 this._specFlowOutputHelper.WriteLine($"Sending POST request to url: {url}");
                 var response = await this.httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
